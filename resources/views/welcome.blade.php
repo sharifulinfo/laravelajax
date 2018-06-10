@@ -82,22 +82,25 @@
                     <section>
                         <div class="container">
                             <div class="row">
+
                                 <div class="col-lg-6">
                                     <form role="form">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Name</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                            <input type="text" class="form-control" id="name" placeholder="Enter email" name="name">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Department</label>
-                                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="deparment">
-                                        </div>  
+                                            <input type="text" class="form-control" id="dep" placeholder="deparment" name="dep">
+                                        </div>
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">  
                                         <button type="submit" id = "show" class="btn btn-default">Submit</button>
                                     </form>
                                 </div>
-                                <div class="col-lg-6">
+
+                               <!--  <div class="col-lg-6">
                                     <div class="bs-example">
-                                        <table class="table">
+                                        <table class="table" id="autoview">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -106,25 +109,19 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @foreach($result as $row)
                                                 <tr>
                                                     <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td> 
+                                                    <td>{{$row->name}}</td>
+                                                    <td>{{$row->dep}}</td> 
                                                 </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td> 
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Larry</td>
-                                                    <td>the Bird</td> 
-                                                </tr>
+                                                @endforeach
+                                                 
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> -->
+
                             </div>
                         </div>
                     </section>
@@ -134,17 +131,21 @@
                 <script src="{{url('frontend')}}/bootstrap.min.js"></script>
 
                 <script type="text/javascript">
-                    $('#show').click(function(){ 
-                        alert('fine');
-                    //    $.ajax({
-                    //     url:"aj/autorefresh.php",
-                    //     method:"POST",
-                    //     // data:{body:content},
-                    //     // success:function(data){ 
-                    //     //      $('#content').val("")
-                    //     // } 
-                    // });
+                    $('#show').click(function(){  
+                        var name = $('#name').val();
+                        var dep = $('#dep').val();
+                       $.ajax({
+                        url:"{{url('/check')}}",
+                        method:"POST",
+                         data:{name:name,dep:dep},
+                        success:function(data){ 
+                             console.log('Something');
+                        } 
+                    });
                 });
+                    setInterval(function(){
+                        $('#autoview').load("{{url('/showdata')}}").fadeIn('slow');
+                    },1000);
                 </script>
             </body>
         </html>
